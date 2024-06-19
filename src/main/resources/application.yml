@@ -1,0 +1,84 @@
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json,application/pdf
+    min-response-size: 1024
+    #servlet:
+    #context-path: /criobit-resource-service
+
+
+#App Info
+spring:
+  profiles:
+    active: '@spring.profiles.active@'
+    username: criobit-resource-service
+    password: criobit-pswd-service
+  application:
+    name: criobit-resource-service
+  jmx:
+    default-domain: criobit-resource-service
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 50MB
+      max-request-size: 75MB
+      location: /tmp
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      hbm2ddl:
+        auto: none
+      naming-strategy: org.hibernate.boot.model.naming.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  zipkin:
+    enabled: false
+  output:
+    ansi:
+      enabled: DETECT
+
+  #liquibase:
+  #  change-log: classpath:db/master.yml
+
+#Actuator Properties
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: health,metrics,info,refresh,bus-refresh,shutdown,hystrix.stream
+  endpoint:
+    shutdown:
+      enabled: true
+
+cors:
+  allowed-headers: '*'
+  exposed-headers: X-Total-Record,Content-Disposition
+  allowed-methods: GET,PUT,POST,DELETE,OPTIONS,PATCH
+  allowed-origin: '*'
+  max-age: 7200
+  configuration: /**
+  #allowed-headers: x-requested-with, authorization, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN
+
+auth:
+  scope: openid
+  api-matcher: /v1/**
+  public-matcher: /public/**,/actuator/**,/swagger-ui.html/**,/configuration/**,/swagger-resources/**,/v2/api-docs/**,/v3/api-docs/**,/webjars/**
+#/no-active-security/**
+
+log:
+  db:
+    enabled: true
+  attribute:
+    ellipsis:
+      enabled: true
+      length: 255
